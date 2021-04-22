@@ -72,8 +72,17 @@ namespace TodoApp
             int i = groupList.SelectedIndex;
             if (i == -1)
             {
-                MessageBox.Show("Please select a task group.");
-                return;
+                if (groups.Count == 0)
+                {
+                    groups.Add(new TaskGroup() { Title = "newgroup" });
+                    groupList.SelectedIndex = 0;
+                    i = 0;
+                }
+                else
+                {
+                    MessageBox.Show("Please select a task group.");
+                    return;
+                }
             }
             groups[i].Tasks.Add(new Task() { Title = "newtask", Description = "", DueDate = DateTime.Now, Status = TaskStatus.Pending });
         }

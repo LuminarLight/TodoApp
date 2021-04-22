@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TodoApp"
         mc:Ignorable="d"
-        Title="Todo App" Height="450" Width="800">
+        Title="Todo App" Height="450" Width="800" MinWidth="800" MinHeight="450">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,9 +27,9 @@
                     <MenuItem Header="Save" Click="MenuSave_Click"/>
                     <MenuItem Header="Save as..." Click="MenuSaveas_Click"/>
                 </MenuItem>
-                <MenuItem Header="Tasks">
-                    <MenuItem Header="New Task" Click="ButtonNewTask_Click"/>
-                    <MenuItem Header="New Task Group" Click="ButtonNewTaskGroup_Click"/>
+                <MenuItem Header="New...">
+                    <MenuItem Header="Task" Click="ButtonNewTask_Click"/>
+                    <MenuItem Header="Task Group" Click="ButtonNewTaskGroup_Click"/>
                 </MenuItem>
             </Menu>
         </Border>
@@ -52,7 +52,7 @@
                                 <Button Content="❎" Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click"/>
                             </StackPanel>
                             <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" BorderThickness="0" Background="Transparent"/>
-                            <ListBox HorizontalAlignment="Stretch" SelectionChanged="taskList_SelectionChanged" HorizontalContentAlignment="Stretch" Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}" Drop="taskList_Drop" PreviewMouseRightButtonDown="taskList_PreviewMouseRightButtonDown" AllowDrop="True">
+                            <ListBox MinHeight="20" HorizontalAlignment="Stretch" SelectionChanged="taskList_SelectionChanged" HorizontalContentAlignment="Stretch" Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}" Drop="taskList_Drop" PreviewMouseRightButtonDown="taskList_PreviewMouseRightButtonDown" AllowDrop="True">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="5,5,5,5" Background="Transparent">
@@ -70,8 +70,8 @@
                                                 <Button Content="❎" Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click"/>
                                             </StackPanel>
                                             <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent"/>
-                                            <TextBlock Text="{Binding DueDate, StringFormat=d}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
-                                            <TextBlock Text="{Binding Status}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
+                                            <TextBlock Text="{Binding DueDate, StringFormat=d}" Margin="5,10,5,0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
+                                            <TextBlock Text="{Binding Status}" Margin="5,10,5,0" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
