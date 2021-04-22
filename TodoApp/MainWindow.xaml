@@ -80,7 +80,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <StackPanel Grid.Column="1">
+            <StackPanel Grid.Column="1" x:Name="editPanel" Visibility="Hidden">
                 <Label Content="Edit selected task:" HorizontalAlignment="Center" FontWeight="Bold"/>
                 <Label Content="Title:" Margin="10,0,10,0"/>
                 <TextBox x:Name="titleTextBox" Margin="10,0" TextWrapping="Wrap"/>
