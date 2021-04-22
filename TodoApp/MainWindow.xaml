@@ -8,35 +8,44 @@
         Title="Todo App" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="New"/>
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="Save as..."/>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Content="Button" Margin="20,10"/>
-                <Button Content="Button" Margin="20,10"/>
-                <Button Content="Button" Margin="20,10"/>
+                <Button Content="New Task" Margin="20,10" Click="ButtonNewTask_Click"/>
+                <Button Content="New Task Group" Margin="20,10" Click="ButtonNewTaskGroup_Click"/>
                 <Button Content="Button" Margin="20,10"/>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400*"/>
-                <ColumnDefinition Width="400*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" x:Name="groupList" Margin="5,5,5,5" HorizontalContentAlignment="Center">
+            <ListBox Grid.Column="0" x:Name="groupList" Margin="5,5,5,5" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Width="350" Background="Transparent">
+                        <Grid HorizontalAlignment="Stretch" MouseLeftButtonDown="GroupGrid_MouseDown" Background="Transparent" Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="50*"/>
                                 <RowDefinition Height="50*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Title}" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold"/>
-                            <ListBox Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}">
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Content="X" Margin="0,0,5,0" Padding="6,3" Click="ButtonDeleteGroup_Click"/>
+                            <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" BorderThickness="0" Background="Transparent"/>
+                            <ListBox HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Width="300" Margin="5,5,5,5" MouseLeftButtonDown="TaskGrid_MouseDown" Background="Transparent">
+                                        <Grid Margin="5,5,5,5" MouseLeftButtonDown="TaskGrid_MouseDown" Background="Transparent">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="150*"/>
                                                 <ColumnDefinition Width="150*"/>
@@ -45,10 +54,10 @@
                                                 <RowDefinition Height="75*"/>
                                                 <RowDefinition Height="75*"/>
                                             </Grid.RowDefinitions>
+                                            <Button Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Content="X" Margin="0,0,0,0" Padding="6,3" Click="ButtonDeleteTask_Click"/>
                                             <TextBlock Text="{Binding Title}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
                                             <TextBlock Text="{Binding DueDate, StringFormat=d}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
                                             <TextBlock Text="{Binding Status}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
-                                            <Label Content="{Binding Description}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
