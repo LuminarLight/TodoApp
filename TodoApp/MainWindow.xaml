@@ -9,43 +9,53 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="50"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
-            <MenuItem Header="File">
-                <MenuItem Header="New"/>
-                <MenuItem Header="Open"/>
-                <MenuItem Header="Save"/>
-                <MenuItem Header="Save as..."/>
-            </MenuItem>
-        </Menu>
+        <Border Grid.Row="0" BorderThickness="0,0,0,5" CornerRadius="0" Margin="0,0,0,10">
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                    <GradientStop Color="#FFF0F0F0" Offset="0.5"/>
+                    <GradientStop Color="#FFF0F0F0" Offset="0.75"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Menu Margin="0,0,0,0">
+                <MenuItem Header="File">
+                    <MenuItem Header="Clear" Click="MenuNew_Click"/>
+                    <MenuItem Header="Open..." Click="MenuOpen_Click"/>
+                    <MenuItem Header="Save" Click="MenuSave_Click"/>
+                    <MenuItem Header="Save as..." Click="MenuSaveas_Click"/>
+                </MenuItem>
+                <MenuItem Header="Tasks">
+                    <MenuItem Header="New Task" Click="ButtonNewTask_Click"/>
+                    <MenuItem Header="New Task Group" Click="ButtonNewTaskGroup_Click"/>
+                </MenuItem>
+            </Menu>
+        </Border>
         <Grid Grid.Row="1">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Content="New Task" Margin="20,10" Click="ButtonNewTask_Click"/>
-                <Button Content="New Task Group" Margin="20,10" Click="ButtonNewTaskGroup_Click"/>
-                <Button Content="Button" Margin="20,10"/>
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" x:Name="groupList" Margin="5,5,5,5" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False">
+            <ListBox Grid.Column="0" x:Name="groupList" Margin="5,5,5,5" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" BorderThickness="0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch" MouseLeftButtonDown="GroupGrid_MouseDown" Background="Transparent" Margin="10">
+                        <Grid HorizontalAlignment="Stretch" Background="Transparent" Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="50*"/>
                                 <RowDefinition Height="50*"/>
                             </Grid.RowDefinitions>
-                            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Content="X" Margin="0,0,5,0" Padding="6,3" Click="ButtonDeleteGroup_Click"/>
+                            <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+                                <Button Content="🔼" Margin="5,0" Width="25" Height="25" Click="ButtonUpGroup_Click"/>
+                                <Button Content="🔽" Margin="5,0" Width="25" Height="25" Click="ButtonDownGroup_Click"/>
+                                <Button Content="❎" Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click"/>
+                            </StackPanel>
                             <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" BorderThickness="0" Background="Transparent"/>
-                            <ListBox HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}">
+                            <ListBox HorizontalAlignment="Stretch" SelectionChanged="taskList_SelectionChanged" HorizontalContentAlignment="Stretch" Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}" Drop="taskList_Drop" PreviewMouseRightButtonDown="taskList_PreviewMouseRightButtonDown" AllowDrop="True">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Margin="5,5,5,5" MouseLeftButtonDown="TaskGrid_MouseDown" Background="Transparent">
+                                        <Grid Margin="5,5,5,5" Background="Transparent">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="150*"/>
                                                 <ColumnDefinition Width="150*"/>
@@ -54,8 +64,12 @@
                                                 <RowDefinition Height="75*"/>
                                                 <RowDefinition Height="75*"/>
                                             </Grid.RowDefinitions>
-                                            <Button Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Content="X" Margin="0,0,0,0" Padding="6,3" Click="ButtonDeleteTask_Click"/>
-                                            <TextBlock Text="{Binding Title}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+                                            <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+                                                <Button Content="🔼" Margin="5,0" Width="25" Height="25" Click="ButtonUpTask_Click"/>
+                                                <Button Content="🔽" Margin="5,0" Width="25" Height="25" Click="ButtonDownTask_Click"/>
+                                                <Button Content="❎" Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click"/>
+                                            </StackPanel>
+                                            <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent"/>
                                             <TextBlock Text="{Binding DueDate, StringFormat=d}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
                                             <TextBlock Text="{Binding Status}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
                                         </Grid>
@@ -68,10 +82,14 @@
             </ListBox>
             <StackPanel Grid.Column="1">
                 <Label Content="Edit selected task:" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <TextBox x:Name="titleTextBox" Margin="10" TextWrapping="Wrap"/>
-                <TextBox x:Name="descTextBox" Margin="10" Height="125" TextWrapping="Wrap"/>
-                <DatePicker x:Name="dueDatePicker" Margin="10"/>
-                <ComboBox x:Name="statusComboBox" Margin="10"/>
+                <Label Content="Title:" Margin="10,0,10,0"/>
+                <TextBox x:Name="titleTextBox" Margin="10,0" TextWrapping="Wrap"/>
+                <Label Content="Description:" Margin="10,0,10,0"/>
+                <TextBox x:Name="descTextBox" Margin="10,0" Height="125" TextWrapping="Wrap"/>
+                <Label Content="Due date:" Margin="10,0,10,0"/>
+                <DatePicker x:Name="dueDatePicker" Margin="10,0"/>
+                <Label Content="Status:" Margin="10,0,10,0"/>
+                <ComboBox x:Name="statusComboBox" Margin="10,0"/>
             </StackPanel>
         </Grid>
     </Grid>
