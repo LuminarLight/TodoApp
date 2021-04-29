@@ -41,7 +41,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" x:Name="groupList" Margin="5,5,5,5" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" BorderThickness="0">
+            <ListBox Grid.Column="0" x:Name="groupList" Margin="5" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" BorderThickness="1" Background="#FFE4FBFB">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Background="Transparent" Margin="10">
@@ -72,15 +72,24 @@
                                 <RowDefinition Height="50*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
-                                <Button Content="🔼" Margin="5,0" Width="25" Height="25" Click="ButtonUpGroup_Click"/>
-                                <Button Content="🔽" Margin="5,0" Width="25" Height="25" Click="ButtonDownGroup_Click"/>
-                                <Button Content="❎" Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click"/>
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveUpIcon.png"/>
+                                </Button>
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveDownIcon.png"/>
+                                </Button>
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/TaskFailedIcon.png"/>
+                                </Button>
                             </StackPanel>
                             <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" BorderThickness="0" Background="Transparent"/>
-                            <ListBox MinHeight="20" HorizontalAlignment="Stretch" SelectionChanged="taskList_SelectionChanged" HorizontalContentAlignment="Stretch" Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}" Drop="taskList_Drop" PreviewMouseRightButtonDown="taskList_PreviewMouseRightButtonDown" AllowDrop="True">
+                            <ListBox MinHeight="20" HorizontalAlignment="Stretch" SelectionChanged="taskList_SelectionChanged" HorizontalContentAlignment="Stretch" Grid.Row="1" x:Name="taskList" Margin="5,5,5,5" ItemsSource="{Binding Tasks}" Drop="taskList_Drop" PreviewMouseRightButtonDown="taskList_PreviewMouseRightButtonDown" AllowDrop="True" Background="#FFEBFFEA">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Margin="5,5,5,5" Background="Transparent">
+                                        <Grid Margin="0">
+                                            <Grid.Background>
+                                                <SolidColorBrush Color="White" Opacity="0.5"/>
+                                            </Grid.Background>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="150*"/>
                                                 <ColumnDefinition Width="150*"/>
@@ -89,13 +98,19 @@
                                                 <RowDefinition Height="75*"/>
                                                 <RowDefinition Height="75*"/>
                                             </Grid.RowDefinitions>
-                                            <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
-                                                <Button Content="🔼" Margin="5,0" Width="25" Height="25" Click="ButtonUpTask_Click"/>
-                                                <Button Content="🔽" Margin="5,0" Width="25" Height="25" Click="ButtonDownTask_Click"/>
-                                                <Button Content="❎" Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click"/>
+                                            <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,10,0,0">
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpTask_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveUpIcon.png"/>
+                                                </Button>
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownTask_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveDownIcon.png"/>
+                                                </Button>
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/TaskFailedIcon.png"/>
+                                                </Button>
                                             </StackPanel>
-                                            <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent"/>
-                                            <TextBlock Text="{Binding DueDate, StringFormat=d}" Margin="5,10,5,0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
+                                            <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent" Margin="0,10,0,0"/>
+                                            <TextBlock Text="{Binding DueDate, StringFormat=d}" Margin="5,10,5,5" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
                                             <!--<TextBlock Text="{Binding Status}" Margin="5,10,5,0" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>-->
                                             <Button Grid.Column="0" Grid.RowSpan="2" Click="TaskImage_MouseLeftButtonDown" HorizontalAlignment="Left" Width="60" Height="60" ToolTip="{Binding Status}" Background="{x:Null}" BorderBrush="{x:Null}" >
                                                 <Image x:Name="taskImage" RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding Path=Status, Converter={StaticResource TaskStatusToImagePathConverter}, BindsDirectlyToSource=True}" ToolTip="{Binding Status}"/>
@@ -128,17 +143,19 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <StackPanel Grid.Column="1" x:Name="editPanel" Visibility="Hidden">
-                <Label Content="Edit selected task:" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <Label Content="Title:" Margin="10,0,10,0"/>
-                <TextBox x:Name="titleTextBox" Margin="10,0" TextWrapping="Wrap" Text="{Binding Title, Mode=TwoWay}"/>
-                <Label Content="Description:" Margin="10,0,10,0"/>
-                <TextBox x:Name="descTextBox" Margin="10,0" Height="125" TextWrapping="Wrap" Text="{Binding Description, Mode=TwoWay}"/>
-                <Label Content="Due date:" Margin="10,0,10,0"/>
-                <DatePicker x:Name="dueDatePicker" Margin="10,0" SelectedDate="{Binding DueDate, Mode=TwoWay}"/>
-                <Label Content="Status:" Margin="10,0,10,0"/>
-                <ComboBox x:Name="statusComboBox" Margin="10,0" SelectedItem="{Binding Status, Mode=TwoWay}"/>
-            </StackPanel>
+            <Border Grid.Column="1" BorderThickness="1" BorderBrush="#FFABADB3" Margin="5" Background="#FFFEFFEE">
+                <StackPanel x:Name="editPanel" Visibility="Hidden">
+                    <Label Content="Edit selected task:" HorizontalAlignment="Center" FontWeight="Bold"/>
+                    <Label Content="Title:" Margin="10,0,10,0"/>
+                    <TextBox x:Name="titleTextBox" Margin="10,0" TextWrapping="Wrap" Text="{Binding Title, Mode=TwoWay}"/>
+                    <Label Content="Description:" Margin="10,0,10,0"/>
+                    <TextBox x:Name="descTextBox" Margin="10,0" Height="125" TextWrapping="Wrap" Text="{Binding Description, Mode=TwoWay}"/>
+                    <Label Content="Due date:" Margin="10,0,10,0"/>
+                    <DatePicker x:Name="dueDatePicker" Margin="10,0" SelectedDate="{Binding DueDate, Mode=TwoWay}"/>
+                    <Label Content="Status:" Margin="10,0,10,0"/>
+                    <ComboBox x:Name="statusComboBox" Margin="10,0" SelectedItem="{Binding Status, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </Window>

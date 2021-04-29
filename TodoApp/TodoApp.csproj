@@ -93,6 +93,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Images\MoveDownIcon.psd" />
+    <None Include="Images\MoveUpIcon.psd" />
     <None Include="Images\TaskDoneIcon.psd" />
     <None Include="Images\TaskFailedIcon.psd" />
     <None Include="Images\TaskPendingIcon.psd" />
@@ -104,7 +106,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\MoveDownIcon.png" />
+    <Resource Include="Images\MoveUpIcon.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\TaskDoneIcon.png" />
     <Resource Include="Images\TaskFailedIcon.png" />
