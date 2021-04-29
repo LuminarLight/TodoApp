@@ -98,7 +98,8 @@ namespace TodoApp
             if (result == MessageBoxResult.No) return;
 
             var parent = VisualTreeHelper.GetParent(sender as Button) as UIElement;
-            Grid g = parent as Grid;
+            var parent2 = VisualTreeHelper.GetParent(parent) as UIElement;
+            Grid g = parent2 as Grid;
             //MessageBox.Show(g.DataContext.GetType().GetProperty("Title").GetValue(g.DataContext).ToString());
             TaskGroup t = g.DataContext as TaskGroup;
             groups.Remove(t);
@@ -382,7 +383,6 @@ namespace TodoApp
     public enum TaskStatus
     {
         Pending,
-        Running,
         Complete
     }
     
