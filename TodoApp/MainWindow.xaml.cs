@@ -18,7 +18,7 @@ using Microsoft.Win32;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
-
+using System.Globalization;
 
 namespace TodoApp
 {
@@ -52,10 +52,12 @@ namespace TodoApp
 
             Task t = listBox.SelectedItem as Task;
 
-            BindingOperations.SetBinding(titleTextBox, TextBox.TextProperty, new Binding() { Source = t, Path = new PropertyPath("Title"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
+            editPanel.DataContext = t;
+
+            /*BindingOperations.SetBinding(titleTextBox, TextBox.TextProperty, new Binding() { Source = t, Path = new PropertyPath("Title"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
             BindingOperations.SetBinding(descTextBox, TextBox.TextProperty, new Binding() { Source = t, Path = new PropertyPath("Description"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
             BindingOperations.SetBinding(dueDatePicker, DatePicker.SelectedDateProperty, new Binding() { Source = t, Path = new PropertyPath("DueDate"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
-            BindingOperations.SetBinding(statusComboBox, ComboBox.SelectedItemProperty, new Binding() { Source = t, Path = new PropertyPath("Status"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
+            BindingOperations.SetBinding(statusComboBox, ComboBox.SelectedItemProperty, new Binding() { Source = t, Path = new PropertyPath("Status"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });*/
             
             if (t == null)
             {
@@ -359,6 +361,21 @@ namespace TodoApp
 
             lastPath = path;
         }
+
+        private ComboBox combo = new ComboBox();
+
+        private void TaskImage_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+        {          
+            var parent = VisualTreeHelper.GetParent(sender as DependencyObject) as UIElement;
+            Grid g = parent as Grid;
+
+            Task t = g.DataContext as Task;
+
+            BindingOperations.SetBinding(combo, ComboBox.SelectedItemProperty, new Binding() { Source = t, Path = new PropertyPath("Status"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
+
+            if (t.Status == TaskStatus.Pending) combo.SelectedItem = TaskStatus.Complete;
+            else if (t.Status == TaskStatus.Complete) combo.SelectedItem = TaskStatus.Pending;
+        }
     }
 
     public class TaskGroup
@@ -385,5 +402,32 @@ namespace TodoApp
         Pending,
         Complete
     }
-    
+
+    public class TaskStatusToImagePathConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            switch (value)
+            {
+                case TaskStatus.Pending:
+                    {
+                        return "/Images/TaskPendingIcon.png";
+                    }
+                case TaskStatus.Complete:
+                    {
+                        return "/Images/TaskDoneIcon.png";
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }
