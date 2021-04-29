@@ -12,9 +12,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" BorderThickness="0,0,0,5" CornerRadius="0" Margin="0,0,0,10">
+        <Border Grid.Row="0" BorderThickness="0,0,0,5" CornerRadius="0" Margin="0,0,0,0">
             <Border.BorderBrush>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -30,13 +31,17 @@
                     <MenuItem Header="Save" Click="MenuSave_Click"/>
                     <MenuItem Header="Save as..." Click="MenuSaveas_Click"/>
                 </MenuItem>
-                <MenuItem Header="New...">
-                    <MenuItem Header="Task" Click="ButtonNewTask_Click"/>
-                    <MenuItem Header="Task Group" Click="ButtonNewTaskGroup_Click"/>
-                </MenuItem>
             </Menu>
         </Border>
-        <Grid Grid.Row="1">
+        <WrapPanel Grid.Row="1" Margin="5,0,0,0">
+            <Button Margin="0" Height="35" Click="ButtonNewTaskGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Add new group">
+                <WrapPanel>
+                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/AddNewIcon.png"/>
+                    <Label Content="New group" VerticalAlignment="Center"/>
+                </WrapPanel>
+            </Button>
+        </WrapPanel>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -72,13 +77,16 @@
                                 <RowDefinition Height="50*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
-                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonNewTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Add new task">
+                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/AddNewIcon.png"/>
+                                </Button>
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move group up">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveUpIcon.png"/>
                                 </Button>
-                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move group down">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveDownIcon.png"/>
                                 </Button>
-                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Delete group">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/TaskFailedIcon.png"/>
                                 </Button>
                             </StackPanel>
@@ -99,13 +107,13 @@
                                                 <RowDefinition Height="75*"/>
                                             </Grid.RowDefinitions>
                                             <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,10,0,0">
-                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpTask_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move task up">
                                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveUpIcon.png"/>
                                                 </Button>
-                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownTask_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move task down">
                                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveDownIcon.png"/>
                                                 </Button>
-                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Delete task">
                                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/TaskFailedIcon.png"/>
                                                 </Button>
                                             </StackPanel>

@@ -93,6 +93,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Images\AddNewIcon.psd" />
     <None Include="Images\MoveDownIcon.psd" />
     <None Include="Images\MoveUpIcon.psd" />
     <None Include="Images\TaskDoneIcon.psd" />
@@ -114,6 +115,9 @@
     <Resource Include="Images\TaskDoneIcon.png" />
     <Resource Include="Images\TaskFailedIcon.png" />
     <Resource Include="Images\TaskPendingIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\AddNewIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
