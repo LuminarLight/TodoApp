@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>TodoAppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -99,6 +102,7 @@
     <None Include="Images\TaskDoneIcon.psd" />
     <None Include="Images\TaskFailedIcon.psd" />
     <None Include="Images\TaskPendingIcon.psd" />
+    <None Include="Images\TodoAppIcon.psd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -118,6 +122,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\AddNewIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TodoAppIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TodoAppIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TodoAppIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
