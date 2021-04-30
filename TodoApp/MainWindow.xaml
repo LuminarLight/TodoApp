@@ -5,15 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TodoApp"
         mc:Ignorable="d"
-        Title="Todo App" Height="450" Width="800" MinWidth="800" MinHeight="450">
+        Title="Todo App" Height="480" Width="800" MinWidth="800" MinHeight="480">
     <Window.Resources>
         <local:TaskStatusToImagePathConverter x:Key="TaskStatusToImagePathConverter" />
+        <local:DueDateToColorConverter x:Key="DueDateToColorConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderThickness="0,0,0,5" CornerRadius="0" Margin="0,0,0,0">
             <Border.BorderBrush>
@@ -34,7 +36,7 @@
             </Menu>
         </Border>
         <WrapPanel Grid.Row="1" Margin="5,0,0,0">
-            <Button Margin="0" Height="35" Click="ButtonNewTaskGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Add new group">
+            <Button Margin="0" Height="35" Click="ButtonNewTaskGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
                 <WrapPanel>
                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/AddNewIcon.png"/>
                     <Label Content="New group" VerticalAlignment="Center"/>
@@ -118,7 +120,14 @@
                                                 </Button>
                                             </StackPanel>
                                             <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent" Margin="0,10,0,0"/>
-                                            <TextBlock Text="{Binding DueDate, StringFormat=d}" Margin="5,10,5,5" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
+                                            <TextBlock Text="{Binding DueDate, StringFormat=d}" Margin="5,10,5,5" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
+                                                <TextBlock.Foreground>
+                                                    <MultiBinding Converter="{StaticResource DueDateToColorConverter }"> 
+                                                        <Binding Path="DueDate"/> 
+                                                        <Binding Path="Status"/> 
+                                                    </MultiBinding> 
+                                                </TextBlock.Foreground>
+                                            </TextBlock>
                                             <!--<TextBlock Text="{Binding Status}" Margin="5,10,5,0" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>-->
                                             <Button Grid.Column="0" Grid.RowSpan="2" Click="TaskImage_MouseLeftButtonDown" HorizontalAlignment="Left" Width="60" Height="60" ToolTip="{Binding Status}" Background="{x:Null}" BorderBrush="{x:Null}" >
                                                 <Image x:Name="taskImage" RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding Path=Status, Converter={StaticResource TaskStatusToImagePathConverter}, BindsDirectlyToSource=True}" ToolTip="{Binding Status}"/>
@@ -152,7 +161,45 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <Border Grid.Column="1" BorderThickness="1" BorderBrush="#FFABADB3" Margin="5" Background="#FFFEFFEE">
-                <StackPanel x:Name="editPanel" Visibility="Hidden">
+                <StackPanel x:Name="editPanel" Visibility="Hidden" Opacity="0">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Style.Resources>
+                                <Storyboard x:Key="FadeOut">
+                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" FillBehavior="Stop">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:1" Value="{x:Static Visibility.Hidden}"/>
+                                    </ObjectAnimationUsingKeyFrames>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:1" AutoReverse="False" />
+                                </Storyboard>
+                                <Storyboard x:Key="FadeIn">
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1" AutoReverse="False" />
+                                </Storyboard>
+                            </Style.Resources>
+                            <Style.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Visibility" Value="Hidden" />
+                                        <Condition Property="Opacity" Value="1" />
+                                    </MultiTrigger.Conditions>
+                                    <MultiTrigger.EnterActions>
+                                        <StopStoryboard BeginStoryboardName="FadeInStoryboard" />
+                                        <BeginStoryboard Name="FadeOutStoryboard" Storyboard="{StaticResource FadeOut}" />
+                                    </MultiTrigger.EnterActions>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Visibility" Value="Visible" />
+                                        <Condition Property="Opacity" Value="0" />
+                                    </MultiTrigger.Conditions>
+                                    <MultiTrigger.EnterActions>
+                                        <StopStoryboard BeginStoryboardName="FadeOutStoryboard" />
+                                        <BeginStoryboard Name="FadeInStoryboard" Storyboard="{StaticResource FadeIn}" />
+                                    </MultiTrigger.EnterActions>
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
                     <Label Content="Edit selected task:" HorizontalAlignment="Center" FontWeight="Bold"/>
                     <Label Content="Title:" Margin="10,0,10,0"/>
                     <TextBox x:Name="titleTextBox" Margin="10,0" TextWrapping="Wrap" Text="{Binding Title, Mode=TwoWay}"/>
@@ -165,5 +212,12 @@
                 </StackPanel>
             </Border>
         </Grid>
+        <StatusBar Grid.Row="3" Height="20" x:Name="statusBar">
+            <StatusBarItem Content="Groups:"/>
+            <StatusBarItem Content="{Binding ElementName=groupList, Path=Items.Count, Mode=OneWay}"/>
+            <Separator/>
+            <StatusBarItem Content="Tasks:"/>
+            <StatusBarItem x:Name="statusTaskCount"/>
+        </StatusBar>
     </Grid>
 </Window>

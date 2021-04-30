@@ -19,14 +19,66 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using System.Globalization;
+using System.ComponentModel;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media.Animation;
 
 namespace TodoApp
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private ObservableCollection<TaskGroup> groups;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public int TasksCount
+        {
+            get
+            {
+                int sum = 0;
+                foreach (var group in groups)
+                {
+                    sum += group.Tasks.Count;
+                }
+                return sum;
+            }
+            set
+            {
+                NotifyPropertyChanged("TasksCount");
+            }
+        }
+
+        private void NotifyPropertyChanged(string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
         private string lastPath = "";
+
+        public string LastPath
+        {
+            get
+            {
+                return lastPath;
+            }
+            set
+            {
+                lastPath = value;
+
+                if (lastPath == "")
+                {
+                    this.Title = "Todo App";
+                }     
+                else
+                {
+                    this.Title = $"Todo App ({lastPath})";
+                }
+            }
+        }
+
 
         public IEnumerable<TaskStatus> TaskStatusValues
         {
@@ -40,10 +92,16 @@ namespace TodoApp
         {
             InitializeComponent();
 
+            TaskGroup.window = this;
+
             groups = new ObservableCollection<TaskGroup>();
 
             groupList.ItemsSource = groups;
             statusComboBox.ItemsSource = TaskStatusValues;
+
+            statusBar.DataContext = this;
+
+            BindingOperations.SetBinding(statusTaskCount, StatusBarItem.ContentProperty, new Binding() { Source = this, Path = new PropertyPath("TasksCount"), Mode = BindingMode.OneWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
         }
 
         private void taskList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -58,7 +116,7 @@ namespace TodoApp
             BindingOperations.SetBinding(descTextBox, TextBox.TextProperty, new Binding() { Source = t, Path = new PropertyPath("Description"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
             BindingOperations.SetBinding(dueDatePicker, DatePicker.SelectedDateProperty, new Binding() { Source = t, Path = new PropertyPath("DueDate"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
             BindingOperations.SetBinding(statusComboBox, ComboBox.SelectedItemProperty, new Binding() { Source = t, Path = new PropertyPath("Status"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });*/
-            
+
             if (t == null)
             {
                 editPanel.Visibility = Visibility.Hidden;
@@ -96,7 +154,7 @@ namespace TodoApp
             {
                 MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this group? This will also delete all the tasks in it.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
                 if (result == MessageBoxResult.No) return;
-            }            
+            }
 
             groups.Remove(t);
         }
@@ -167,7 +225,7 @@ namespace TodoApp
                 if (group.Tasks.Remove(t))
                 {
                     return;
-                }               
+                }
             }
         }
 
@@ -196,7 +254,7 @@ namespace TodoApp
                         return;
                     }
                 }
-            }           
+            }
         }
 
         private void ButtonDownTask_Click(object sender, RoutedEventArgs e)
@@ -286,10 +344,15 @@ namespace TodoApp
                 MessageBoxResult result = MessageBox.Show("You are about to delete all groups and tasks. This action is irreversible. Are you sure you want to do this?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
                 if (result == MessageBoxResult.No) return;
             }
-            
+
+            foreach (var group in groups)
+            {
+                group.Tasks.Clear();
+            }
+
             groups.Clear();
 
-            lastPath = "";
+            LastPath = "";
         }
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
@@ -315,7 +378,8 @@ namespace TodoApp
                 }
             }
 
-            lastPath = dialog.FileName;
+            LastPath = dialog.FileName;
+            NotifyPropertyChanged("TasksCount");
         }
 
         private void MenuSave_Click(object sender, RoutedEventArgs e)
@@ -331,10 +395,10 @@ namespace TodoApp
         private void SaveFile(bool showdiag)
         {
             string path;
-            
-            if (File.Exists(lastPath) && !showdiag)
+
+            if (File.Exists(LastPath) && !showdiag)
             {
-                path = lastPath;
+                path = LastPath;
             }
             else
             {
@@ -359,13 +423,13 @@ namespace TodoApp
                 }
             }
 
-            lastPath = path;
+            LastPath = path;
         }
 
         private ComboBox combo = new ComboBox();
 
         private void TaskImage_MouseLeftButtonDown(object sender, RoutedEventArgs e)
-        {          
+        {
             var parent = VisualTreeHelper.GetParent(sender as DependencyObject) as UIElement;
             Grid g = parent as Grid;
 
@@ -382,10 +446,17 @@ namespace TodoApp
     {
         public string Title { get; set; }
         public ObservableCollection<Task> Tasks { get; set; }
+        public static MainWindow window { get; set; }
 
         public TaskGroup()
         {
             Tasks = new ObservableCollection<Task>();
+            Tasks.CollectionChanged += Tasks_CollectionChanged;
+        }
+
+        private void Tasks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            window.TasksCount = 0;
         }
     }
 
@@ -425,6 +496,38 @@ namespace TodoApp
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DueDateToColorConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime time = (DateTime)values[0];
+            TaskStatus status = (TaskStatus)values[1];
+
+            if (status == TaskStatus.Complete)
+            {
+                return Brushes.Green;
+            }
+            else if (time.Date < DateTime.Today)
+            {
+                return Brushes.Red;
+            }
+            else if (time.Date == DateTime.Today)
+            {
+                return Brushes.Orange;
+            }
+            else if (time.Date > DateTime.Today)
+            {
+                return Brushes.Blue;
+            }
+            else return Brushes.Black;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
