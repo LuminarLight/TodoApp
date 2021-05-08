@@ -21,8 +21,14 @@ namespace TodoApp
     {
         private ObservableCollection<TaskGroup> groups;
 
+        /// <summary>
+        /// The property changed event.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// This property returns the sum of all tasks of all task groups.
+        /// </summary>
         public int TasksCount
         {
             get
@@ -32,10 +38,14 @@ namespace TodoApp
                 {
                     sum += group.Tasks.Count;
                 }
-                return sum; // Returns sum of all tasklists of all task groups.
+                return sum;
             }
         }
 
+        /// <summary>
+        /// An easier way to call PropertyChanged.
+        /// </summary>
+        /// <param name="propertyName">The name of the property.</param>
         public void NotifyPropertyChanged(string propertyName = "")
         {
             if (PropertyChanged != null)
@@ -46,6 +56,9 @@ namespace TodoApp
 
         private string lastPath = "";
 
+        /// <summary>
+        /// This property returns or sets the last file path. When it sets it, it will also update the window title.
+        /// </summary>
         public string LastPath
         {
             get
@@ -67,7 +80,9 @@ namespace TodoApp
             }
         }
 
-
+        /// <summary>
+        /// Returns the values of the TaskStatus enum.
+        /// </summary>
         public IEnumerable<TaskStatus> TaskStatusValues
         {
             get
@@ -76,6 +91,9 @@ namespace TodoApp
             }
         }
 
+        /// <summary>
+        /// Constructor of the main window, initializes things.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
