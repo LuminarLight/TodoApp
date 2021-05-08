@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,6 +22,7 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
+using TodoApp.Classes;
 
 namespace TodoApp
 {
@@ -157,6 +158,8 @@ namespace TodoApp
             }
 
             groups.Remove(t);
+
+            NotifyPropertyChanged("TasksCount");
         }
 
         private void ButtonUpGroup_Click(object sender, RoutedEventArgs e)
@@ -440,97 +443,5 @@ namespace TodoApp
             if (t.Status == TaskStatus.Pending) combo.SelectedItem = TaskStatus.Complete;
             else if (t.Status == TaskStatus.Complete) combo.SelectedItem = TaskStatus.Pending;
         }
-    }
-
-    public class TaskGroup
-    {
-        public string Title { get; set; }
-        public ObservableCollection<Task> Tasks { get; set; }
-        public static MainWindow window { get; set; }
-
-        public TaskGroup()
-        {
-            Tasks = new ObservableCollection<Task>();
-            Tasks.CollectionChanged += Tasks_CollectionChanged;
-        }
-
-        private void Tasks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            window.TasksCount = 0;
-        }
-    }
-
-    public class Task
-    {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime DueDate { get; set; }
-        public TaskStatus Status { get; set; }
-    }
-
-    public enum TaskStatus
-    {
-        Pending,
-        Complete
-    }
-
-    public class TaskStatusToImagePathConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            switch (value)
-            {
-                case TaskStatus.Pending:
-                    {
-                        return "/Images/TaskPendingIcon.png";
-                    }
-                case TaskStatus.Complete:
-                    {
-                        return "/Images/TaskDoneIcon.png";
-                    }
-                default:
-                    {
-                        return null;
-                    }
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class DueDateToColorConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            DateTime time = (DateTime)values[0];
-            TaskStatus status = (TaskStatus)values[1];
-
-            if (status == TaskStatus.Complete)
-            {
-                return Brushes.Green;
-            }
-            else if (time.Date < DateTime.Today)
-            {
-                return Brushes.Red;
-            }
-            else if (time.Date == DateTime.Today)
-            {
-                return Brushes.Orange;
-            }
-            else if (time.Date > DateTime.Today)
-            {
-                return Brushes.Blue;
-            }
-            else return Brushes.Black;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
+    }    
 }

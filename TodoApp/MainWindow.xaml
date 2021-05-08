@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TodoApp"
+        xmlns:local="clr-namespace:TodoApp" xmlns:conv="clr-namespace:TodoApp.Converters"
         mc:Ignorable="d"
         Title="Todo App" Height="480" Width="800" MinWidth="800" MinHeight="480" Icon="Images/TodoAppIcon.ico">
     <Window.Resources>
-        <local:TaskStatusToImagePathConverter x:Key="TaskStatusToImagePathConverter" />
-        <local:DueDateToColorConverter x:Key="DueDateToColorConverter" />
+        <conv:TaskStatusToImagePathConverter x:Key="TaskStatusToImagePathConverter" />
+        <conv:DueDateToColorConverter x:Key="DueDateToColorConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
