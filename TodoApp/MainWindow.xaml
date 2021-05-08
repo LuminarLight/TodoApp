@@ -9,6 +9,11 @@
     <Window.Resources>
         <conv:TaskStatusToImagePathConverter x:Key="TaskStatusToImagePathConverter" />
         <conv:DueDateToColorConverter x:Key="DueDateToColorConverter" />
+        <Style x:Key="buttonForImages" TargetType="Button">
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+        </Style>
+
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -36,7 +41,7 @@
             </Menu>
         </Border>
         <WrapPanel Grid.Row="1" Margin="5,0,0,0">
-            <Button Margin="0" Height="35" Click="ButtonNewTaskGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+            <Button Margin="0" Height="35" Click="ButtonNewTaskGroup_Click" Style="{StaticResource buttonForImages}">
                 <WrapPanel>
                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/AddNewIcon.png"/>
                     <Label Content="New group" VerticalAlignment="Center"/>
@@ -48,7 +53,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" x:Name="groupList" Margin="5" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" BorderThickness="1" Background="#FFE4FBFB">
+            <ListBox Grid.Column="0" x:Name="groupList" Margin="5" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" BorderThickness="1" Background="#FFE4FBFB" ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Background="Transparent" Margin="10">
@@ -79,16 +84,16 @@
                                 <RowDefinition Height="50*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
-                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonNewTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Add new task">
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonNewTask_Click" Style="{StaticResource buttonForImages}" ToolTip="Add new task">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/AddNewIcon.png"/>
                                 </Button>
-                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move group up">
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpGroup_Click" Style="{StaticResource buttonForImages}" ToolTip="Move group up">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveUpIcon.png"/>
                                 </Button>
-                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move group down">
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownGroup_Click" Style="{StaticResource buttonForImages}" ToolTip="Move group down">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveDownIcon.png"/>
                                 </Button>
-                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Delete group">
+                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteGroup_Click" Style="{StaticResource buttonForImages}" ToolTip="Delete group">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/TaskFailedIcon.png"/>
                                 </Button>
                             </StackPanel>
@@ -109,50 +114,29 @@
                                                 <RowDefinition Height="75*"/>
                                             </Grid.RowDefinitions>
                                             <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,10,0,0">
-                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move task up">
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonUpTask_Click" Style="{StaticResource buttonForImages}" ToolTip="Move task up">
                                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveUpIcon.png"/>
                                                 </Button>
-                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Move task down">
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDownTask_Click" Style="{StaticResource buttonForImages}" ToolTip="Move task down">
                                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/MoveDownIcon.png"/>
                                                 </Button>
-                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click" Background="{x:Null}" BorderBrush="{x:Null}" ToolTip="Delete task">
+                                                <Button Margin="5,0" Width="25" Height="25" Click="ButtonDeleteTask_Click" Style="{StaticResource buttonForImages}" ToolTip="Delete task">
                                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Images/TaskFailedIcon.png"/>
                                                 </Button>
                                             </StackPanel>
                                             <TextBox Text="{Binding Title, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent" Margin="0,10,0,0"/>
                                             <TextBlock Text="{Binding DueDate, StringFormat=d}" Margin="5,10,5,5" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
                                                 <TextBlock.Foreground>
-                                                    <MultiBinding Converter="{StaticResource DueDateToColorConverter }"> 
-                                                        <Binding Path="DueDate"/> 
-                                                        <Binding Path="Status"/> 
-                                                    </MultiBinding> 
+                                                    <MultiBinding Converter="{StaticResource DueDateToColorConverter }">
+                                                        <Binding Path="DueDate"/>
+                                                        <Binding Path="Status"/>
+                                                    </MultiBinding>
                                                 </TextBlock.Foreground>
                                             </TextBlock>
-                                            <!--<TextBlock Text="{Binding Status}" Margin="5,10,5,0" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>-->
-                                            <Button Grid.Column="0" Grid.RowSpan="2" Click="TaskImage_MouseLeftButtonDown" HorizontalAlignment="Left" Width="60" Height="60" ToolTip="{Binding Status}" Background="{x:Null}" BorderBrush="{x:Null}" >
+                                            <Button Grid.Column="0" Grid.RowSpan="2" Click="TaskImage_MouseLeftButtonDown" HorizontalAlignment="Left" Width="60" Height="60" ToolTip="{Binding Status}" Style="{StaticResource buttonForImages}">
                                                 <Image x:Name="taskImage" RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding Path=Status, Converter={StaticResource TaskStatusToImagePathConverter}, BindsDirectlyToSource=True}" ToolTip="{Binding Status}"/>
                                             </Button>
                                         </Grid>
-                                        <!--<DataTemplate.Triggers>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding Path=Status}" Value="Pending" />
-                                                </MultiDataTrigger.Conditions>
-                                                <MultiDataTrigger.Setters>
-                                                    <Setter TargetName="taskImage" Property="Source" Value="/Images/TaskPendingIcon.png"/>
-                                                    <Setter TargetName="taskImage" Property="ToolTip" Value="Pending" />
-                                                </MultiDataTrigger.Setters>
-                                            </MultiDataTrigger>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding Path=Status}" Value="Complete" />
-                                                </MultiDataTrigger.Conditions>
-                                                <MultiDataTrigger.Setters>
-                                                    <Setter TargetName="taskImage" Property="Source" Value="/Images/TaskDoneIcon.png"/>
-                                                    <Setter TargetName="taskImage" Property="ToolTip" Value="Complete" />
-                                                </MultiDataTrigger.Setters>
-                                            </MultiDataTrigger>
-                                        </DataTemplate.Triggers>-->
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
