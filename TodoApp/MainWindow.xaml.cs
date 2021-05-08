@@ -88,8 +88,6 @@ namespace TodoApp
             statusComboBox.ItemsSource = TaskStatusValues;
 
             statusBar.DataContext = this;
-
-            BindingOperations.SetBinding(statusTaskCount, StatusBarItem.ContentProperty, new Binding() { Source = this, Path = new PropertyPath("TasksCount"), Mode = BindingMode.OneWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
         }
 
         private void taskList_SelectionChanged(object sender, SelectionChangedEventArgs e)

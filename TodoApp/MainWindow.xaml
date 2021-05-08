@@ -203,7 +203,7 @@
             <StatusBarItem Content="{Binding ElementName=groupList, Path=Items.Count, Mode=OneWay}"/>
             <Separator/>
             <StatusBarItem Content="Tasks:"/>
-            <StatusBarItem x:Name="statusTaskCount"/>
+            <StatusBarItem x:Name="statusTaskCount" Content="{Binding TasksCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StatusBar>
     </Grid>
 </Window>
