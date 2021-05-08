@@ -68,16 +68,6 @@
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
-                                <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     Duration="00:00:02"
-                                                     From="1"
-                                                     To="0" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
                             </Grid.Triggers>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="50*"/>
@@ -110,16 +100,6 @@
                                                      Duration="00:00:01"
                                                      From="0"
                                                      To="1" />
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </EventTrigger>
-                                                <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     Duration="00:00:02"
-                                                     From="1"
-                                                     To="0" />
                                                         </Storyboard>
                                                     </BeginStoryboard>
                                                 </EventTrigger>
