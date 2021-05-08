@@ -7,7 +7,7 @@ namespace TodoApp.Classes
     {
         public string Title { get; set; }
         public ObservableCollection<Task> Tasks { get; set; }
-        public static MainWindow window { get; set; }
+        public static MainWindow Window { get; set; } // A static property, in which we store reference to the main window. Should be set from the main window itself.
 
         public TaskGroup()
         {
@@ -17,7 +17,7 @@ namespace TodoApp.Classes
 
         private void Tasks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            window.TasksCount = 0;
+            Window.NotifyPropertyChanged("TasksCount"); // Need to update task count when the tasks collection of any group changes.
         }
     }
 

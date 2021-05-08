@@ -32,15 +32,11 @@ namespace TodoApp
                 {
                     sum += group.Tasks.Count;
                 }
-                return sum;
-            }
-            set
-            {
-                NotifyPropertyChanged("TasksCount");
+                return sum; // Returns sum of all tasklists of all task groups.
             }
         }
 
-        private void NotifyPropertyChanged(string propertyName = "")
+        public void NotifyPropertyChanged(string propertyName = "")
         {
             if (PropertyChanged != null)
             {
@@ -84,7 +80,7 @@ namespace TodoApp
         {
             InitializeComponent();
 
-            TaskGroup.window = this;
+            TaskGroup.Window = this; // Setting the 'Window' static property of the TaskGroup class - all TaskGroup instances will use this.
 
             groups = new ObservableCollection<TaskGroup>();
 
@@ -104,14 +100,9 @@ namespace TodoApp
 
             editPanel.DataContext = t;
 
-            /*BindingOperations.SetBinding(titleTextBox, TextBox.TextProperty, new Binding() { Source = t, Path = new PropertyPath("Title"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
-            BindingOperations.SetBinding(descTextBox, TextBox.TextProperty, new Binding() { Source = t, Path = new PropertyPath("Description"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
-            BindingOperations.SetBinding(dueDatePicker, DatePicker.SelectedDateProperty, new Binding() { Source = t, Path = new PropertyPath("DueDate"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
-            BindingOperations.SetBinding(statusComboBox, ComboBox.SelectedItemProperty, new Binding() { Source = t, Path = new PropertyPath("Status"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });*/
-
             if (t == null)
             {
-                editPanel.Visibility = Visibility.Hidden;
+                editPanel.Visibility = Visibility.Hidden; // Hide the edit panel if no task is selected.
             }
             else
             {
@@ -139,10 +130,9 @@ namespace TodoApp
             var parent = VisualTreeHelper.GetParent(sender as Button) as UIElement;
             var parent2 = VisualTreeHelper.GetParent(parent) as UIElement;
             Grid g = parent2 as Grid;
-            //MessageBox.Show(g.DataContext.GetType().GetProperty("Title").GetValue(g.DataContext).ToString());
             TaskGroup t = g.DataContext as TaskGroup;
 
-            if (t.Tasks.Count > 0)
+            if (t.Tasks.Count > 0) // Only ask for confirmation if the group has tasks in it.
             {
                 MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this group? This will also delete all the tasks in it.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
                 if (result == MessageBoxResult.No) return;
@@ -150,7 +140,7 @@ namespace TodoApp
 
             groups.Remove(t);
 
-            NotifyPropertyChanged("TasksCount");
+            NotifyPropertyChanged("TasksCount"); // Need to re-calculate tasks count.
         }
 
         private void ButtonUpGroup_Click(object sender, RoutedEventArgs e)
@@ -211,14 +201,13 @@ namespace TodoApp
             var parent = VisualTreeHelper.GetParent(sender as Button) as UIElement;
             var parent2 = VisualTreeHelper.GetParent(parent) as UIElement;
             Grid g = parent2 as Grid;
-            //MessageBox.Show(g.DataContext.GetType().GetProperty("Title").GetValue(g.DataContext).ToString());
             Task t = g.DataContext as Task;
 
             foreach (var group in groups)
             {
                 if (group.Tasks.Remove(t))
                 {
-                    return;
+                    return; // Stop looking if the task was found and successfully deleted.
                 }
             }
         }
@@ -333,7 +322,7 @@ namespace TodoApp
 
         private void MenuNew_Click(object sender, RoutedEventArgs e)
         {
-            if (groups.Count > 0)
+            if (groups.Count > 0) // Only ask for confirmation if there is something in the application.
             {
                 MessageBoxResult result = MessageBox.Show("You are about to delete all groups and tasks. This action is irreversible. Are you sure you want to do this?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
                 if (result == MessageBoxResult.No) return;
@@ -373,7 +362,7 @@ namespace TodoApp
             }
 
             LastPath = dialog.FileName;
-            NotifyPropertyChanged("TasksCount");
+            NotifyPropertyChanged("TasksCount"); // Need to re-calculate task count after opening a file.
         }
 
         private void MenuSave_Click(object sender, RoutedEventArgs e)
@@ -390,7 +379,7 @@ namespace TodoApp
         {
             string path;
 
-            if (File.Exists(LastPath) && !showdiag)
+            if (File.Exists(LastPath) && !showdiag) // No need to show file dialog if person clicked on Save and the last path is valid.
             {
                 path = LastPath;
             }
@@ -420,7 +409,7 @@ namespace TodoApp
             LastPath = path;
         }
 
-        private ComboBox combo = new ComboBox();
+        private ComboBox combo = new ComboBox(); // Had to create a hidden ComboBox for this to work properly:
 
         private void TaskImage_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {

@@ -42,21 +42,21 @@ namespace TodoApp.Converters
 
             if (status == TaskStatus.Complete)
             {
-                return Brushes.Green;
+                return Brushes.Green; // Return green color if task is complete.
             }
             else if (time.Date < DateTime.Today)
             {
-                return Brushes.Red;
+                return Brushes.Red; // Return red color if we are past the due date.
             }
             else if (time.Date == DateTime.Today)
             {
-                return Brushes.Orange;
+                return Brushes.Orange; // Return orange color if due date is today.
             }
             else if (time.Date > DateTime.Today)
             {
-                return Brushes.Blue;
+                return Brushes.Blue; // Return blue color if we still have time.
             }
-            else return Brushes.Black;
+            else return Brushes.Black; // Return black color if none of the above is true, which is impossible.
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
